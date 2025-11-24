@@ -10,11 +10,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import cmpmemecreator.composeapp.generated.resources.Res
 import cmpmemecreator.composeapp.generated.resources.meme_template_01
 import com.sargis.cmpmemecreator.core.presentation.MemeTemplate
 import com.sargis.cmpmemecreator.core.theme2.CMPMemeCreatorTheme
+import com.sargis.cmpmemecreator.memeEditor.presentation.components.MemeTextBox
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -49,6 +51,30 @@ fun MemeEditorScreen(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillWidth
         )
+
+        state.memeTexts.forEach { memeText ->
+            MemeTextBox(
+                memeText = MemeText(
+                    id = memeText.id,
+                    text = memeText.text,
+                ),
+                textBoxInteractionState = state.textBoxInteractionState,
+                maxWith = 500.dp,
+                maxHeight = 500.dp,
+                onClick = {
+                    onAction(MemeEditorAction.OnSelectMemeText(memeText.id))
+                },
+                onDoubleClick = {
+                    onAction(MemeEditorAction.OnEditMemeText(memeText.id))
+                },
+                onTextChange = {
+                    onAction(MemeEditorAction.OnMemeTextChanged(memeText.id, it))
+                },
+                onDeleteClick = {
+                    onAction(MemeEditorAction.OnDeleteMemeTextClick(memeText.id))
+                }
+            )
+        }
     }
 }
 
